@@ -34,7 +34,7 @@ Li, J., and Valliant, R. (2009). Survey weighted hat matrix and leverages. \emph
 
 Lumley, T. (2010). \emph{Complex Surveys}. New York: John Wiley & Sons.
 
-Lumley, T. (2014). survey: analysis of complex survey samples. R package version 3.30.
+Lumley, T. (2021). survey: analysis of complex survey samples. R package version 4.1-1.
 }
 
 \author{

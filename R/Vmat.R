@@ -1,5 +1,6 @@
 Vmat <- function(mobj, stvar = NULL, clvar = NULL){
-    e <- mobj$residuals
+    e <- residuals(mobj, type ="response")
+
     mrows <- names(mobj$y)
     mdata <- mobj$data[rownames(mobj$data) %in% mrows, ]
     if (is.null(clvar)) {

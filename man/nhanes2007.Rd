@@ -53,7 +53,7 @@ The National Health and Nutrition Examination Survey (NHANES) is a program of st
 }
 \source{
 National Health and Nutrition Examination Survey of 2007-2008 conducted by the U.S. National Center for Health Statistics.
-\url{http://www.cdc.gov/nchs/nhanes.htm}
+\url{https://www.cdc.gov/nchs/nhanes.htm}
 }
 
 \examples{

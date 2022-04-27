@@ -1,6 +1,17 @@
 import(MASS, survey)
 export(svycollinear, svyCooksD, svydfbetas, svydffits, svyhat, svystdres, svyvif, Vmat)
-importFrom("graphics", "abline", "plot")
-importFrom("stats", "glm.fit", "model.matrix", "predict", "var", "vcov", "weighted.mean")
-importFrom("utils", "head")
-importFrom("Matrix", "bdiag") 
+importFrom("graphics", 
+    "abline", 
+    "plot")
+importFrom("stats", 
+    "glm.fit", 
+    "model.matrix", 
+    "predict", 
+    "residuals", 
+    "var", 
+    "vcov", 
+    "weighted.mean")
+importFrom("utils", 
+    "head")
+importFrom("Matrix", 
+    "bdiag")

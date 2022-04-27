@@ -59,7 +59,7 @@ collinearity in linear model analysis of survey data. \emph{Survey Methodology},
 
 Lumley, T. (2010). \emph{Complex Surveys}. New York: John Wiley & Sons.
 
-Lumley, T. (2018). survey: analysis of complex survey samples. R package version 3.34.
+Lumley, T. (2021). survey: analysis of complex survey samples. R package version 4.1-1.
 }
 
 \author{
@@ -95,7 +95,7 @@ X <- model.matrix(~ RIDAGEYR + as.factor(RIDRETH1) + DR1TKCAL + DR1TTFAT + DR1TM
             + DR1TSFAT + DR1TPFAT,
         data = data.frame(nhanes2007))
 CI.out <- svycollinear(mod = X, w=nhanes2007$WTDRD1, Vcov=vcov(m1), sc=TRUE, svyglm.obj=FALSE,
-        rnd=2, fuzz=0.3)        
+        rnd=2, fuzz=0.3)
 }
 
 \keyword{methods}

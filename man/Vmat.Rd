@@ -2,10 +2,10 @@
 \alias{Vmat}
 
 \title{
-Compute covariance matrix of residuals for linear models fitted with complex survey data
+Compute covariance matrix of residuals for general linear models fitted with complex survey data
 }
 \description{
-Compute a covariance matrix using residuals from a fixed effects, linear regression model fitted with data collected from one- and two-stage complex survey designs.
+Compute a covariance matrix using residuals from a fixed effects, general linear regression model fitted with data collected from one- and two-stage complex survey designs.
 }
 \usage{
 Vmat(mobj, stvar = NULL, clvar = NULL)
@@ -23,7 +23,7 @@ Vmat(mobj, stvar = NULL, clvar = NULL)
 }
 }
 \details{
-\code{Vmat} computes a covariance matrix among the residuals returned from \code{svyglm} in the \code{survey} package. The matrix that is computed is appropriate under these model assumptions: (1) in single-stage, unclustered sampling, units are assumed to be uncorrelated but can have different model variances, (2) in single-stage, stratified sampling, units are assumed to be uncorrelated within strata and between strata but can have different model variances; (3) in unstratified, clustered samples, units in different clusters are assumed to be uncorrelated but units within clusters are correlated; (3) in stratified, clustered samples, units in different strata or clusters are assumed to be uncorrelated but units within clusters are correlated.
+\code{Vmat} computes a covariance matrix among the residuals returned from \code{svyglm} in the \code{survey} package. \code{Vmat} is called by \code{svyvif} when computing variance inflation factors. The matrix that is computed by \code{Vmat} is appropriate under these model assumptions: (1) in single-stage, unclustered sampling, units are assumed to be uncorrelated but can have different model variances, (2) in single-stage, stratified sampling, units are assumed to be uncorrelated within strata and between strata but can have different model variances; (3) in unstratified, clustered samples, units in different clusters are assumed to be uncorrelated but units within clusters are correlated; (3) in stratified, clustered samples, units in different strata or clusters are assumed to be uncorrelated but units within clusters are correlated.
 }
 
 \value{
@@ -35,14 +35,14 @@ Liao, D, and Valliant, R. (2012). Variance inflation factors in the analysis of 
 
 Lumley, T. (2010). \emph{Complex Surveys}. New York: John Wiley & Sons.
 
-Lumley, T. (2014). survey: analysis of complex survey samples. R package version 3.30.
+Lumley, T. (2021). survey: analysis of complex survey samples. R package version 4.1-1.
 }
 
 \author{
 Richard Valliant
 }
 \seealso{
-\code{\link{Vmat}}
+\code{\link{svyvif}}
 }
 
 \examples{
@@ -74,7 +74,7 @@ summary(m1)
 V <- Vmat(mobj = m1,
           stvar = "SDMVSTRA",
           clvar = "SDMVPSU")
-}          
+}
 
 \keyword{methods}
 \keyword{survey} 
