@@ -13,7 +13,9 @@ svycollinear(mod, intcpt=TRUE, w, Vcov, sc=TRUE, svyglm.obj, rnd=3, fuzz=0.3)
 
 \arguments{
   \item{mod}{
- Either (i) an \eqn{n \times p} matrix of real-valued covariates used in fitting a linear regression; \eqn{n} = number of observations, \eqn{p} = number of covariates in model, excluding the intercept; the matrix \code{mod} should not contain columns for the strata and cluster identifiers (unless those variables are part of the model). No missing values are allowed. Or, (ii) a model object produced by \code{svyglm} in the \code{survey} package.
+ Either (i) an \eqn{n \times p} matrix of real-valued covariates used in fitting a linear regression; \eqn{n} = number of observations, \eqn{p} = number of covariates in model, excluding the intercept; the matrix \code{mod} should not contain columns for the strata and cluster identifiers (unless those variables are part of the model). No missing values are allowed. The matrix can be created with \code{model.matrix}; see the example below. The \code{model} list component of an \code{svyglm} object cannot be used as it does not have factor variables coded as zero-ones.
+
+Or, (ii) a model object produced by \code{svyglm} in the \code{survey} package.
 }
   \item{intcpt}{
   \code{TRUE} if the model contains an intercept; \code{FALSE} if not.
@@ -28,7 +30,7 @@ svycollinear(mod, intcpt=TRUE, w, Vcov, sc=TRUE, svyglm.obj, rnd=3, fuzz=0.3)
     \code{TRUE} if the columns of the weighted model matrix \eqn{\tilde{\mathbf{X}}} (defined in Details) should be scaled for computing condition indexes; \code{FALSE} if not. If \code{TRUE}, each column of  \eqn{\tilde{\mathbf{X}}} is divided by its Euclidean norm, \eqn{\sqrt{\tilde{\mathbf{x}}^T \tilde{\mathbf{x}}}}.
 }
   \item{svyglm.obj}{
-    Is \code{mod} a \code{svyglm.obj} object? \code{TRUE} or \code{FALSE}.
+    Is \code{mod} a \code{svyglm.obj} object? \code{TRUE} or \code{FALSE}. If \code{mod} is a matrix, set \code{svyglm.obj} to \code{FALSE}.
 }
   \item{rnd}{
     Round the output to \code{rnd} decimal places.
@@ -59,7 +61,7 @@ collinearity in linear model analysis of survey data. \emph{Survey Methodology},
 
 Lumley, T. (2010). \emph{Complex Surveys}. New York: John Wiley & Sons.
 
-Lumley, T. (2021). survey: analysis of complex survey samples. R package version 4.1-1.
+Lumley, T. (2023). survey: analysis of complex survey samples. R package version 4.2.
 }
 
 \author{
@@ -79,10 +81,6 @@ m1 <- svyglm(api00~ell+meals+mobility, design=dstrat)
 CI.out <- svycollinear(mod = m1, w=apistrat$pw, Vcov=vcov(m1), sc=TRUE, svyglm.obj=TRUE,
         rnd=3, fuzz= 0.3)
 
-    # send model matrix from svyglm
-svycollinear(mod = m1$model, w=apistrat$pw, Vcov=vcov(m1), sc=TRUE, svyglm.obj=TRUE,
-        rnd=3, fuzz=0.3)
-
     # use model.matrix to create matrix of covariates in model
 data(nhanes2007)
 newPSU <- paste(nhanes2007$SDMVSTRA, nhanes2007$SDMVPSU, sep=".")
@@ -99,4 +97,4 @@ CI.out <- svycollinear(mod = X, w=nhanes2007$WTDRD1, Vcov=vcov(m1), sc=TRUE, svy
 }
 
 \keyword{methods}
-\keyword{survey} 
+\keyword{survey}

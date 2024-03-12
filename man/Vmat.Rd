@@ -35,7 +35,7 @@ Liao, D, and Valliant, R. (2012). Variance inflation factors in the analysis of 
 
 Lumley, T. (2010). \emph{Complex Surveys}. New York: John Wiley & Sons.
 
-Lumley, T. (2021). survey: analysis of complex survey samples. R package version 4.1-1.
+Lumley, T. (2023). survey: analysis of complex survey samples. R package version 4.2.
 }
 
 \author{

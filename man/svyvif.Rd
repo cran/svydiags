@@ -53,7 +53,7 @@ Theil, H. (1971). \emph{Principles of Econometrics}. New York: John Wiley & Sons
 
 Lumley, T. (2010). \emph{Complex Surveys}. New York: John Wiley & Sons.
 
-Lumley, T. (2018). survey: analysis of complex survey samples. R package version 3.34.
+Lumley, T. (2023). survey: analysis of complex survey samples. R package version 4.2.
 }
 
 \author{

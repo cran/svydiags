@@ -1,5 +1,4 @@
 svyCooksD <- function(mobj, stvar=NULL, clvar=NULL, doplot=FALSE){
-#browser()
     xdat <- mobj$data[, all.vars(mobj$formula)]
     X <- model.matrix(mobj$formula, xdat)
     w <- mobj$weights
