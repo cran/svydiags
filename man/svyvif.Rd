@@ -16,7 +16,7 @@ svyvif(mobj, X, w, stvar=NULL, clvar=NULL)
  model object produced by \code{svyglm}. The following families of models are allowed: binomial, gaussian, poisson, quasibinomial, and quasipoisson. Other families allowed by \code{svyglm} will produce an error in \code{svyvif}.
 }
   \item{X}{
- \eqn{n \times p} matrix of real-valued covariates used in fitting a linear regression; \eqn{n} = number of observations, \eqn{p} = number of covariates in model, excluding the intercept. A column of 1's for an intercept should not be included. \code{X} should not contain columns for the strata and cluster identifiers (unless those variables are part of the model). No missing values are allowed.
+ \eqn{n \times p} matrix of real-valued covariates used in fitting the regression; \eqn{n} = number of observations, \eqn{p} = number of covariates in model, excluding the intercept. A column of 1's for an intercept should not be included. \code{X} should not contain columns for the strata and cluster identifiers (unless those variables are part of the model). No missing values are allowed.
 }
   \item{w}{
  \eqn{n}-vector of survey weights used in fitting the model. No missing values are allowed.
@@ -29,17 +29,33 @@ svyvif(mobj, X, w, stvar=NULL, clvar=NULL)
 }
 }
 \details{
-\code{svyvif} computes a variance inflation factor (VIF) appropriate for linear models and some general linear models (GLMs) fitted from complex survey data (see Liao & Valliant 2012). A VIF measures the inflation of a slope estimate caused by nonorthogonality of the predictors over and above what the variance would be with orthogonality (Theil 1971; Belsley, Kuh, and Welsch 1980). The standard VIF equals \eqn{1/(1 - R^2_k)} where \eqn{R_k} is the multiple correlation of the \eqn{k^{th}} column of \code{X} regressed on the remaining columns. The complex sample value of the VIF for a linear model consists of the standard VIF multiplied by two adjustments denoted in the output as \code{zeta} and \code{varrho}. The VIF for a GLM is similar (Liao 2010, chap. 5). There is no widely agreed-upon cutoff value for identifying high values of a VIF, although 10 is a common suggestion.
+\code{svyvif} computes variance inflation factors (VIFs) appropriate for linear models and some general linear models (GLMs) fitted from complex survey data (see Liao 2010 and Liao & Valliant 2012). A VIF measures the inflation of a slope estimate caused by nonorthogonality of the predictors over and above what the variance would be with orthogonality (Theil 1971; Belsley, Kuh, and Welsch 1980). A VIF may also be thought of as the amount that the variance of an estimated coefficient for a predictor \emph{x} is inflated in a model that includes all \emph{x}'s compared to a model that includes only the single \emph{x}. Another alternative is to use as a comparison a model that includes an intercept and the single \emph{x}. Both of these VIFs are in the output.
+
+The standard VIF equals \eqn{1/(1 - R^2_k)} where \eqn{R_k} is the multiple correlation of the \eqn{k^{th}} column of \code{X} regressed on the remaining columns. The complex sample value of the VIF for a linear model consists of the standard VIF multiplied by two adjustments denoted in the output as \code{zeta} and either \code{varrho.m} or \code{varrho}. The VIF for a GLM is similar (Liao 2010, chap. 5; Liao & Valliant 2024). There is no widely agreed-upon cutoff value for identifying high values of a VIF, although 10 is a common suggestion.
 }
 
 \value{
- \eqn{p \times 5} matrix with columns:
-  \item{svy.vif}{complex sample VIF}
-  \item{reg.vif}{standard VIF, \eqn{1/(1 - R^2_k)}, that omits the factors, \code{zeta} and \code{varrho}; \eqn{R^2_k} is an R-square from a weighted least squares regression of the \eqn{k^{th}} x on the other x's in the regression}
-  \item{zeta}{1st multiplicative adjustment to \code{reg.vif}}
-  \item{varrho}{2nd multiplicative adjustment to \code{reg.vif}}
-  \item{zeta.x.varrho}{product of the two adjustments to \code{reg.vif}}
-  \item{R.square}{R-square in the regression of the \eqn{k^{th}} x on the other x's, including the intercept}
+A list with two components:
+  \describe{
+    \item{\code{Intercept adjusted}}{\eqn{p \times 6} data frame with columns:}
+    \describe{
+        \item{\code{svy.vif.m:}}{  complex sample VIF where the reference model includes an intercept and a single \emph{x}}
+        \item{\code{reg.vif.m:}}{  standard VIF, \eqn{1/(1 - R^2_{m(k)})}, that omits the factors, \code{zeta} and \code{varrho.m}; \eqn{R^2_{m(k)}} is an R-square, corrected for the mean, from a weighted least squares regression of the \eqn{k^{th}} \emph{x} on the other \emph{x}'s in the regression}
+        \item{\code{zeta:}}{  1st multiplicative adjustment to \code{reg.vif.m}}
+        \item{\code{varrho.m:}}{  2nd multiplicative adjustment to \code{reg.vif.m}}
+        \item{\code{zeta.x.varrho.m:}}{  product of the two adjustments to \code{reg.vif.m}}
+        \item{\code{Rsq.m:}}{  R-square, corrected for the mean, in the regression of the \eqn{k^{th}} \emph{x} on the other \emph{x}'s, including an intercept}
+    }
+     \item{\code{No intercept}}{\eqn{p \times 6} data frame with columns:}
+     \describe{
+        \item{\code{svy.vif:}}{  complex sample VIF where the reference model includes a single \emph{x} and excludes an intercept; this VIF is analogous to the one included in standard packages that provide VIFs for linear regressions}
+        \item{\code{reg.vif:}}{  standard VIF, \eqn{1/(1 - R^2_k)}, that omits the factors, \code{zeta} and \code{varrho}; \eqn{R^2_k} is an R-square, not corrected for the mean, from a weighted least squares regression of the \eqn{k^{th}} \emph{x} on the other \emph{x}'s in the regression}
+        \item{\code{zeta:}}{  1st multiplicative adjustment to \code{reg.vif}}
+        \item{\code{varrho:}}{  2nd multiplicative adjustment to \code{reg.vif}}
+        \item{\code{zeta.x.varrho:}}{  product of the two adjustments to \code{reg.vif}}
+        \item{\code{Rsq:}}{  R-square, not corrected for the mean, in the regression of the \eqn{k^{th}} \emph{x} on the other \emph{x}'s, including an intercept}
+    }
+  }
 }
 
 \references{
@@ -49,11 +65,13 @@ Liao, D. (2010). Collinearity Diagnostics for Complex Survey Data. PhD thesis, U
 
 Liao, D, and Valliant, R. (2012). Variance inflation factors in the analysis of complex survey data. \emph{Survey Methodology}, 38, 53-62.
 
+Liao, D, and Valliant, R. (2024). Variance Inflation Factors in Generalized Linear Models with Extensions to Analysis of Survey Data. submitted.
+
 Theil, H. (1971). \emph{Principles of Econometrics}. New York: John Wiley & Sons, Inc.
 
 Lumley, T. (2010). \emph{Complex Surveys}. New York: John Wiley & Sons.
 
-Lumley, T. (2023). survey: analysis of complex survey samples. R package version 4.2.
+Lumley, T. (2023). survey: analysis of complex survey samples. R package version 4.4.
 }
 
 \author{
