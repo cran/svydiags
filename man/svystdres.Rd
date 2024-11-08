@@ -32,7 +32,7 @@ svystdres(mobj, stvar=NULL, clvar=NULL, doplot=FALSE)
   \item{stdresids}{Numeric vector whose names are the rows of the data frame in the \code{svydesign} object that were used in fitting the model}
   \item{n}{number of sample clusters}
   \item{mbar}{average number of non-missing, sample elements per cluster}
-  \item{rtsighat}{estimate of the square root of the model variance of the residuals, \eqn{\sqrt(\sigma^2)}}
+  \item{rtsighat}{estimate of the square root of the model variance of the residuals, \eqn{\sigma}}
   \item{rhohat}{estimate of the intracluster correlation of the residuals, \eqn{\rho}}
 }
 

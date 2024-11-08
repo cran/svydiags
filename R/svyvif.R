@@ -1,7 +1,13 @@
 svyvif <- function(mobj, X, w, stvar=NULL, clvar=NULL){
   if (dim(X)[1] != length(w))
         stop("Dimensions of X and w do not match. Check that input contains complete cases only. \n")
-  chk.fam <- mobj$family$family %in% c("binomial","gaussian","poisson","quasibinomial","quasipoisson")
+  fam <- mobj$family$family
+  lnk <- mobj$family$link
+  hat.y <- mobj$fitted.values
+  beta <- mobj$coefficients
+
+  chk.fam <- fam %in% c("binomial","gaussian","poisson","quasibinomial","quasipoisson","Gamma",
+                                       "inverse.gaussian")
   if (!chk.fam) stop("Only binomial, gaussian, poisson, quasibinomial, and quasipoisson families are supported. \n")
 
     V <- Vmat(mobj, stvar, clvar)
@@ -13,7 +19,7 @@ svyvif <- function(mobj, X, w, stvar=NULL, clvar=NULL){
     X.fit <- data.frame(1,X)    # Add intercept back to the X matrix
     hat.N <- sum(w)
 
-  if (mobj$family$family == "gaussian"){
+  if (fam == "gaussian"){
     rtw <- sqrt(w)
     rtwX <- rtw * X
     rtwVrtw <- t(rtw * t(rtw * V))
@@ -45,10 +51,21 @@ svyvif <- function(mobj, X, w, stvar=NULL, clvar=NULL){
     }
   }
 
-  if (mobj$family$family != "gaussian"){
+  if (fam != "gaussian"){
     mu <- mobj$fitted.values  # works for all glm's
-    if (mobj$family$family == "binomial" || mobj$family$family == "quasibinomial") v <- gam <- mu*(1-mu)
-      else if (mobj$family$family == "poisson" || mobj$family$family == "quasipoisson") v <- gam <- mu
+  if (fam == "binomial" || fam == "quasibinomial") v <- gam <- mu*(1-mu)
+  if (fam == "poisson" || fam == "quasipoisson") v <- gam <- mu
+  if (fam == "Gamma"){
+      if (lnk != "inverse") stop("Only the inverse link is supported for the Gamma family.\n")
+      if (lnk == "inverse") v <- gam <- hat.y^2
+  }
+  if (fam == "inverse.gaussian"){
+      if (lnk != "1/mu^2") stop("Only the 1/mu^2 link is supported for the inverse.gaussian family.\n")
+      if (lnk == "1/mu^2") {
+        gam <- hat.y^3/4
+        v <- hat.y^3
+      }
+  }
 
     Delta <- 1/v
     rtwg <- sqrt(w * gam)
